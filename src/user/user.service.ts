@@ -8,15 +8,15 @@ import { USERS_REPOSITORY } from 'src/constants';
 export class UserService {
   constructor(
     @Inject(USERS_REPOSITORY)
-    private usersRepository: typeof User
+    private repository: typeof User
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  create(createUserDto: CreateUserDto): Promise<User> {
+    return this.repository.create(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  findAll(): Promise<User[]> {
+    return this.repository.findAll();
   }
 
   findOne(id: number) {
