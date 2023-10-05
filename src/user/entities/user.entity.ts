@@ -1,7 +1,10 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, IsEmail, HasMany } from 'sequelize-typescript';
 import { GenderEnum } from '../enum';
+import { Task } from 'src/task/entities/task.entity';
 
-@Table
+@Table({
+  tableName: 'users',
+})
 export class User extends Model<User> {
   @Column({
     type: DataType.STRING,
@@ -9,10 +12,10 @@ export class User extends Model<User> {
   })
   name: string;
 
+  @IsEmail
   @Column({
-    type: DataType.STRING,
-    unique: true,
     allowNull: false,
+    unique: true,
   })
   email: string;
 
@@ -27,5 +30,8 @@ export class User extends Model<User> {
     values: Object.values(GenderEnum),
     allowNull: false,
   })
-  gender: string;
-}
+  gender: GenderEnum;
+
+  @HasMany(() => Task)
+  tasks: Task[];
+};

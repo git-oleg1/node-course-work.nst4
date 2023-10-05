@@ -19,15 +19,18 @@ export class UserService {
     return this.repository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: number): Promise<User> {
+    return this.repository.findByPk(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.findOne(id);
+    user.set(updateUserDto);
+    return await user.save();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<boolean> {
+    const n = await this.repository.destroy({ where: { id } });
+    return n === 1;
   }
 }
