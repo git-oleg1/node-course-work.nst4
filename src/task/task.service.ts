@@ -11,23 +11,26 @@ export class TaskService {
     private repository: typeof Task
   ) {}
 
-  create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+  create(createTaskDto: CreateTaskDto): Promise<Task> {
+    return this.repository.create(createTaskDto);
   }
 
-  findAll() {
-    return `This action returns all task`;
+  findAll(): Promise<Task[]> {
+    return this.repository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  findOne(id: number): Promise<Task> {
+    return this.repository.findByPk(id);
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
+    const task = await this.findOne(id);
+    task.set(updateTaskDto);
+    return await task.save();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: number): Promise<boolean> {
+    const n = await this.repository.destroy({ where: { id } });
+    return n === 1;
   }
 }
