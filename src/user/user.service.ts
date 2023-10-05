@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { USERS_REPOSITORY } from 'src/constants';
+import { FindOptions, WhereOptions } from 'sequelize';
 
 @Injectable()
 export class UserService {
@@ -19,12 +20,16 @@ export class UserService {
     return this.repository.findAll();
   }
 
-  findOne(id: number): Promise<User> {
+  findOne(options: WhereOptions<User>): Promise<User> {
+    return this.repository.findOne({ where: options });
+  }
+
+  findByPk(id: number): Promise<User> {
     return this.repository.findByPk(id);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.findOne(id);
+    const user = await this.findByPk(id);
     user.set(updateUserDto);
     return await user.save();
   }

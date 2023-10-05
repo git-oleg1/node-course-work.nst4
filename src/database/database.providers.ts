@@ -18,7 +18,7 @@ export const databaseProviders = [
         database: configService.get<string>('DATABASE_NAME'),
       });
       sequelize.addModels([User, Task]);
-      await sequelize.sync({ force: true });
+      await sequelize.sync(/*{ force: true }*/);
       return sequelize;
     },
   },
